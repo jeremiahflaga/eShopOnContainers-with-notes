@@ -54,6 +54,9 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API
                 .AddIntegrationServices(Configuration)
                 .AddEventBus(Configuration)
                 .AddSwagger(Configuration)
+                // NOTE_JBOY: from https://docs.microsoft.com/en-us/learn/modules/microservices-aspnet-core/6-add-coupon-service
+                // The AddCustomHealthCheck extension method tests external service dependencies 
+                // to confirm availability and normal operation.
                 .AddCustomHealthCheck(Configuration);
 
             var container = new ContainerBuilder();
@@ -104,6 +107,12 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API
                     }
                 });
                 endpoints.MapGrpcService<CatalogService>();
+
+                // NOTE_JBOY: from https://docs.microsoft.com/en-us/learn/modules/microservices-aspnet-core/6-add-coupon-service
+                // The preceding change registers two HTTP health check endpoints with the ASP.NET Core routing system:
+                // 1. /liveness: A liveness endpoint that Kubernetes queries periodically to check for failures.
+                // 2. /hc: A readiness endpoint that Kubernetes queries to know when a service is ready to start accepting traffic.
+                //         The same endpoint is also queried by an external health monitoring system, like the WebStatus app.
                 endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
                 {
                     Predicate = _ => true,

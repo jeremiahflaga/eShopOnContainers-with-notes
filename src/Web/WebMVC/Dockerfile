@@ -1,3 +1,5 @@
+# NOTE_JBOY: see https://docs.microsoft.com/en-us/learn/modules/microservices-aspnet-core/6-add-coupon-service for explanation
+
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS base
 WORKDIR /app
 EXPOSE 80
