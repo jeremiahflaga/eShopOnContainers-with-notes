@@ -209,6 +209,7 @@ namespace Microsoft.eShopOnContainers.WebMVC
                 options.ClientId = useLoadTest ? "mvctest" : "mvc";
                 options.ClientSecret = "secret";
                 options.ResponseType = useLoadTest ? "code id_token token" : "code id_token";
+                // NOTE_JBOY: set SaveTokens to save tokens to the AuthenticationProperties (from https://www.jerriepelser.com/blog/accessing-tokens-aspnet-core-2/)
                 options.SaveTokens = true;
                 options.GetClaimsFromUserInfoEndpoint = true;
                 options.RequireHttpsMetadata = false;
@@ -220,6 +221,11 @@ namespace Microsoft.eShopOnContainers.WebMVC
                 options.Scope.Add("locations");
                 options.Scope.Add("webshoppingagg");
                 options.Scope.Add("orders.signalrhub");
+
+                // NOTE_JBOY: By default, the redirect URL will use the /signin-oidc path (from https://www.scottbrady91.com/Identity-Server/Getting-Started-with-IdentityServer-4)
+                // options.CallbackPath = "/signin-oidc"; // default redirect URI
+                // options.Scope.Add("oidc"); // default scope
+                // options.Scope.Add("profile"); // default scope
             });
 
             return services;

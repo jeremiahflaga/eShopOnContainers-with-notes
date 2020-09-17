@@ -44,10 +44,15 @@ namespace Microsoft.eShopOnContainers.Services.Identity.API.Configuration
                     ClientId = "js",
                     ClientName = "eShop SPA OpenId Client",
                     AllowedGrantTypes = GrantTypes.Implicit,
+                    // NOTE_JBOY: to allow to pass tokens via browser URL (from "ASP.NET Core, C#, IdentityServer4 - Authentication - Tricking Library Ep28" - https://www.youtube.com/watch?v=Ql0ZB67J0TQ)
                     AllowAccessTokensViaBrowser = true,
                     RedirectUris =           { $"{clientsUrl["Spa"]}/" },
+                    // NOTE_JBOY: Consent screen is only needed if there is a thrid party client app that wants to authenticate with us (from "ASP.NET Core, C#, IdentityServer4 - Authentication - Tricking Library Ep28" - https://www.youtube.com/watch?v=Ql0ZB67J0TQ)
+                    // If you are the one creating the client and you know all the information you will grab, you will NOT need a consent screen.
                     RequireConsent = false,
                     PostLogoutRedirectUris = { $"{clientsUrl["Spa"]}/" },
+                    // NOTE_JBOY: Because people are going from different domains to authenticate, you need to specify CORS origins.
+                    // We are basically saying "we are expecting authentication from this guy, and then this is something we can validate " (from "ASP.NET Core, C#, IdentityServer4 - Authentication - Tricking Library Ep28" - https://www.youtube.com/watch?v=Ql0ZB67J0TQ)
                     AllowedCorsOrigins =     { $"{clientsUrl["Spa"]}" },
                     AllowedScopes =
                     {
@@ -74,6 +79,7 @@ namespace Microsoft.eShopOnContainers.Services.Identity.API.Configuration
                     },
                     RedirectUris = { clientsUrl["Xamarin"] },
                     RequireConsent = false,
+                    // NOTE_JBOY: to allow code flow through the browser (from "ASP.NET Core, C#, IdentityServer4 - Authentication - Tricking Library Ep28" - https://www.youtube.com/watch?v=Ql0ZB67J0TQ)
                     RequirePkce = true,
                     PostLogoutRedirectUris = { $"{clientsUrl["Xamarin"]}/Account/Redirecting" },
                     //AllowedCorsOrigins = { "http://eshopxamarin" },
@@ -102,20 +108,25 @@ namespace Microsoft.eShopOnContainers.Services.Identity.API.Configuration
                         new Secret("secret".Sha256())
                     },
                     ClientUri = $"{clientsUrl["Mvc"]}",                             // public uri of the client
-                    AllowedGrantTypes = GrantTypes.Hybrid,
+                    // NOTE_JBOY: how our application is going to authenticate -- the code flow (from "ASP.NET Core, C#, IdentityServer4 - Authentication - Tricking Library Ep28" - https://www.youtube.com/watch?v=Ql0ZB67J0TQ)
+                    AllowedGrantTypes = GrantTypes.Hybrid, 
                     AllowAccessTokensViaBrowser = false,
                     RequireConsent = false,
+                    // NOTE_JBOY: enable support for refresh tokens via the AllowOfflineAccess property (from https://docs.identityserver.io/en/latest/quickstarts/3_aspnetcore_and_apis.html)
                     AllowOfflineAccess = true,
                     AlwaysIncludeUserClaimsInIdToken = true,
-                    RedirectUris = new List<string>
+                    // NOTE_JBOY: where to go to authenticate (from "ASP.NET Core, C#, IdentityServer4 - Authentication - Tricking Library Ep28" - https://www.youtube.com/watch?v=Ql0ZB67J0TQ)
+                    RedirectUris = new List<string> 
                     {
                         $"{clientsUrl["Mvc"]}/signin-oidc"
                     },
-                    PostLogoutRedirectUris = new List<string>
+                    // NOTE_JBOY: where to go after logout(from "ASP.NET Core, C#, IdentityServer4 - Authentication - Tricking Library Ep28" - https://www.youtube.com/watch?v=Ql0ZB67J0TQ)
+                    PostLogoutRedirectUris = new List<string> 
                     {
                         $"{clientsUrl["Mvc"]}/signout-callback-oidc"
                     },
-                    AllowedScopes = new List<string>
+                    // NOTE_JBOY: Scope is the area of information or category of information you want to extract. (from "ASP.NET Core, C#, IdentityServer4 - Authentication - Tricking Library Ep28" - https://www.youtube.com/watch?v=Ql0ZB67J0TQ)
+                    AllowedScopes = new List<string> 
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,

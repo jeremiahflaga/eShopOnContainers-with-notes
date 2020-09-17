@@ -102,6 +102,7 @@ namespace Microsoft.eShopOnContainers.Services.Identity.API.Controllers
                         props.IsPersistent = true;
                     };
 
+                    // NOTE_JBOY: SignInAsync creates an encrypted cookie and adds it to the current response. (https://docs.microsoft.com/en-us/aspnet/core/security/authentication/cookie?view=aspnetcore-3.1)
                     await _loginService.SignInAsync(user, props);
 
                     // make sure the returnUrl is still valid, and if yes - redirect back to authorize endpoint

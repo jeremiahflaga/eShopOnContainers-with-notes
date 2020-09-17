@@ -48,8 +48,11 @@ namespace Microsoft.eShopOnContainers.Services.Identity.API
                         sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
                     }));
 
+            // NOTE_JBOY: [2020-09-13] (taken from "ASP.NET Core, C#, IdentityServer4 - Authentication - Tricking Library Ep28" - https://www.youtube.com/watch?v=Ql0ZB67J0TQ)
+            // "we need a place to store our user records, and we need the services for creating users, UserManager, 
+            //      services for signing in, SignInManager"
             services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddEntityFrameworkStores<ApplicationDbContext>() // to wire it to a database
                 .AddDefaultTokenProviders();
 
             services.Configure<AppSettings>(Configuration);

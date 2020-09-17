@@ -18,6 +18,7 @@ namespace WebMVC.Infrastructure
             _httpContextAccesor = httpContextAccesor;
         }
 
+        // NOTE_JBOY: I think this is some kind of an interceptor for each request
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             var authorizationHeader = _httpContextAccesor.HttpContext
