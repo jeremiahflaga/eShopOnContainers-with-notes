@@ -11,17 +11,17 @@ namespace WebMVC.Infrastructure
     public class HttpClientAuthorizationDelegatingHandler
         : DelegatingHandler
     {
-        private readonly IHttpContextAccessor _httpContextAccesor;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public HttpClientAuthorizationDelegatingHandler(IHttpContextAccessor httpContextAccesor)
+        public HttpClientAuthorizationDelegatingHandler(IHttpContextAccessor httpContextAccessor)
         {
-            _httpContextAccesor = httpContextAccesor;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         // NOTE_JBOY: I think this is some kind of an interceptor for each request
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            var authorizationHeader = _httpContextAccesor.HttpContext
+            var authorizationHeader = _httpContextAccessor.HttpContext
                 .Request.Headers["Authorization"];
 
             if (!string.IsNullOrEmpty(authorizationHeader))
@@ -43,7 +43,7 @@ namespace WebMVC.Infrastructure
         {
             const string ACCESS_TOKEN = "access_token";
 
-            return await _httpContextAccesor.HttpContext
+            return await _httpContextAccessor.HttpContext
                 .GetTokenAsync(ACCESS_TOKEN);
         }
     }

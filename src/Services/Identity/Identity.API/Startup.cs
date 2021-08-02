@@ -63,7 +63,7 @@ namespace Microsoft.eShopOnContainers.Services.Identity.API
                 {
                     opts.ApplicationDiscriminator = "eshop.identity";
                 })
-                .PersistKeysToRedis(ConnectionMultiplexer.Connect(Configuration["DPConnectionString"]), "DataProtection-Keys");
+                .PersistKeysToStackExchangeRedis(ConnectionMultiplexer.Connect(Configuration["DPConnectionString"]), "DataProtection-Keys");
             }
 
             services.AddHealthChecks()
@@ -131,7 +131,6 @@ namespace Microsoft.eShopOnContainers.Services.Identity.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
             }
             else
             {
